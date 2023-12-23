@@ -1,4 +1,5 @@
 import pygame
+import math
 
 
 def load_map():
@@ -24,7 +25,7 @@ class Cells():
         self.top = 10
         self.cell_size = 30
 
-    def render(self, screen, map_pos, mode, form_values):
+    def render(self, screen, map_pos, mode):
         '''for y in range(self.height):
             for x in range(self.width):
                 pygame.draw.rect(screen, 'white',
@@ -58,13 +59,32 @@ class Cells():
                                           self.cell_size, self.cell_size), 0)
                         self.board.append([x - 11, y - 4])
 
-            '''file.close()'''
+            '''---------------------pygame.draw.rect(screen, 'red',
+                             (15 * self.cell_size + self.left + 1,
+                              4 * self.cell_size + self.top + 1,
+                              self.cell_size - 2, self.cell_size - 2), 0)---------------------'''
+
+
+            '''            elif self.data_map[y][x] == 'p':
+                        pygame.draw.rect(screen, 'red',
+                                         (15 * x * self.cell_size + self.left + 1,  # 8   15       112         11
+                                          y * self.cell_size + self.top + 1,  # 5    4     270          3
+                                          self.cell_size - 2, self.cell_size - 2), 0)
+                        if self.data_map[y][x] == 'p':
+                            situation = 1
+
+            file.close()'''
 
         elif mode == 1:
-            pygame.draw.rect(screen, 'red',
+            '''----------------------pygame.draw.rect(screen, 'red',
                              ((form_values[0] // 100 - 1) * self.cell_size + self.left + 1,  # 8   15       112
                               (form_values[1] // 270 + 1) * self.cell_size + self.top + 1,  # 5    4     270
-                              self.cell_size - 2, self.cell_size - 2), 0)
+                              self.cell_size - 2, self.cell_size - 2), 0)----------------------'''
+            '''pygame.draw.rect(screen, 'red',
+                             (15 * self.cell_size + self.left + 1,  # 8   15       112         11
+                              4 * self.cell_size + self.top + 1,  # 5    4     270          3
+                              self.cell_size - 2, self.cell_size - 2), 0)'''
+            screen.blit(image, (15 * self.cell_size + self.left, 4 * self.cell_size + self.top))
 
         for y in range(self.height):
             for x in range(self.width):
@@ -103,17 +123,18 @@ pygame.init()
 display_info = pygame.display.Info()
 monitor_width = display_info.current_w
 monitor_height = display_info.current_h
-form_values = [monitor_width, monitor_height - 50]
+'''------------------form_values = [monitor_width, monitor_height - 50]------------------'''
 
 screen = pygame.display.set_mode((monitor_width, monitor_height - 50), pygame.RESIZABLE)
 pygame.display.set_caption('40 Degrees Of Hell')
 
 cells = Cells(11, 11)
-cells.set_view(monitor_width // 33, (monitor_height - 50) // 20, monitor_height // 21)
-print(monitor_width // 33, (monitor_height - 50) // 20, monitor_height // 21)
-print(monitor_width // 50, (monitor_height - 50) // 50, monitor_height // 50)
+cells.set_view(50, 50, 50)
+'''----------------------------cells.set_view(50, 50, (monitor_height - 50) // 20)----------------------------'''
+'''----------------------------print(monitor_width // 33, (monitor_height - 50) // 20, (monitor_height - 50) // 20)
+print(monitor_width // 50, (monitor_height - 50) // 50, (monitor_height - 50) // 50)
 print(monitor_height // 50)
-print(monitor_width, monitor_height)
+print(monitor_width, monitor_height)----------------------------'''
 tick = 0
 map_pos = [5, 1]
 player_pos = [0, 0]
@@ -128,13 +149,23 @@ while running:
             running = False
         if event.type == pygame.VIDEORESIZE:
             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-            cells.set_view(event.w // 33, event.h // 20, event.h // 21)
+            '''------------------------cells.set_view(50, 50, event.h // 21)
             form_values = [event.w, event.h]
-            print(event.w // 33, event.h // 20, event.h // 21)
-            print(event.w, event.h)
+            print(event.w // 33, event.h // 20, event.h // 20)
+            print(event.w, event.h)------------------------'''
         if event.type == pygame.MOUSEBUTTONDOWN:
             #if collidepoint(event.pos):
             print(cells.get_cell(event.pos))
+
+        if event.type == pygame.MOUSEMOTION:
+            original_image = pygame.image.load('player.png')
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            rel_x = mouse_x - (15 * cells.cell_size + cells.left + 0)
+            rel_y = mouse_y - (4 * cells.cell_size + cells.top + 0)
+            angle = math.degrees(-math.atan2(rel_y, rel_x))
+            image = pygame.transform.rotate(original_image, int(angle))
+            # rect = image.get_rect(center=(70, 70))
+            # rect = image.get_rect(center=(25, 25))
 
     if tick == 5:
         keys = pygame.key.get_pressed()
@@ -201,9 +232,9 @@ while running:
     tick += 1
 
     screen.fill('black')
-    cells.render(screen, map_pos, 0, form_values)
-    cells.render(screen, map_pos, 1, form_values)
-    cells.render(screen, map_pos, 2, form_values)
+    cells.render(screen, map_pos, 0)
+    cells.render(screen, map_pos, 1)
+    cells.render(screen, map_pos, 2)
     pygame.display.flip()
     clock.tick(60)
 
