@@ -24,7 +24,7 @@ class Cells():
         self.top = 10
         self.cell_size = 30
 
-    def render(self, screen, map_pos, mode):
+    def render(self, screen, map_pos, mode, form_values):
         '''for y in range(self.height):
             for x in range(self.width):
                 pygame.draw.rect(screen, 'white',
@@ -62,8 +62,8 @@ class Cells():
 
         elif mode == 1:
             pygame.draw.rect(screen, 'red',
-                             (15 * self.cell_size + self.left + 1,  # 8
-                              4 * self.cell_size + self.top + 1,  # 5
+                             ((form_values[0] // 100 - 1) * self.cell_size + self.left + 1,  # 8   15       112
+                              (form_values[1] // 270 + 1) * self.cell_size + self.top + 1,  # 5    4     270
                               self.cell_size - 2, self.cell_size - 2), 0)
 
         for y in range(self.height):
@@ -103,12 +103,17 @@ pygame.init()
 display_info = pygame.display.Info()
 monitor_width = display_info.current_w
 monitor_height = display_info.current_h
+form_values = [monitor_width, monitor_height - 50]
 
 screen = pygame.display.set_mode((monitor_width, monitor_height - 50), pygame.RESIZABLE)
 pygame.display.set_caption('40 Degrees Of Hell')
 
 cells = Cells(11, 11)
-cells.set_view(50, 50, 50)
+cells.set_view(monitor_width // 33, (monitor_height - 50) // 20, monitor_height // 21)
+print(monitor_width // 33, (monitor_height - 50) // 20, monitor_height // 21)
+print(monitor_width // 50, (monitor_height - 50) // 50, monitor_height // 50)
+print(monitor_height // 50)
+print(monitor_width, monitor_height)
 tick = 0
 map_pos = [5, 1]
 player_pos = [0, 0]
@@ -123,6 +128,10 @@ while running:
             running = False
         if event.type == pygame.VIDEORESIZE:
             screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+            cells.set_view(event.w // 33, event.h // 20, event.h // 21)
+            form_values = [event.w, event.h]
+            print(event.w // 33, event.h // 20, event.h // 21)
+            print(event.w, event.h)
         if event.type == pygame.MOUSEBUTTONDOWN:
             #if collidepoint(event.pos):
             print(cells.get_cell(event.pos))
@@ -192,9 +201,9 @@ while running:
     tick += 1
 
     screen.fill('black')
-    cells.render(screen, map_pos, 0)
-    cells.render(screen, map_pos, 1)
-    cells.render(screen, map_pos, 2)
+    cells.render(screen, map_pos, 0, form_values)
+    cells.render(screen, map_pos, 1, form_values)
+    cells.render(screen, map_pos, 2, form_values)
     pygame.display.flip()
     clock.tick(60)
 
