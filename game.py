@@ -158,7 +158,7 @@ while running:
             print(cells.get_cell(event.pos))
 
         if event.type == pygame.MOUSEMOTION:
-            original_image = pygame.image.load('player.png')
+            original_image = pygame.image.load('player_test_1.png')
             mouse_x, mouse_y = pygame.mouse.get_pos()
             rel_x = mouse_x - (15 * cells.cell_size + cells.left + 0)
             rel_y = mouse_y - (4 * cells.cell_size + cells.top + 0)
