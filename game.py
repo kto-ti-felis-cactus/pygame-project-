@@ -1,5 +1,6 @@
 import pygame
 import math
+import bullets_code
 
 
 def load_map():
@@ -16,7 +17,7 @@ def get_form_size():
     return [width, height]
 
 
-class Cells():
+class Cells:
     def __init__(self, width, height):
         self.width = width
         self.height = height
@@ -25,7 +26,7 @@ class Cells():
         self.top = 10
         self.cell_size = 30
 
-    def render(self, screen, map_pos, mode):
+    def render(self, surface, map_position, mode):
         '''for y in range(self.height):
             for x in range(self.width):
                 pygame.draw.rect(screen, 'white',
@@ -43,19 +44,19 @@ class Cells():
             for y in range(len(self.data_map)):
                 for x in range(len(self.data_map[y])):
                     if self.data_map[y][x] == '1':
-                        pygame.draw.rect(screen, 'blue',
-                                         (x * self.cell_size + self.left * map_pos[0],
-                                          y * self.cell_size + self.top * map_pos[1],
+                        pygame.draw.rect(surface, 'blue',
+                                         (x * self.cell_size + self.left * map_position[0],
+                                          y * self.cell_size + self.top * map_position[1],
                                           self.cell_size, self.cell_size), 0)
                     elif self.data_map[y][x] == '0':
-                        pygame.draw.rect(screen, 'green',
-                                         (x * self.cell_size + self.left * map_pos[0],
-                                          y * self.cell_size + self.top * map_pos[1],
+                        pygame.draw.rect(surface, 'green',
+                                         (x * self.cell_size + self.left * map_position[0],
+                                          y * self.cell_size + self.top * map_position[1],
                                           self.cell_size, self.cell_size), 0)
                     elif self.data_map[y][x] == '2':
-                        pygame.draw.rect(screen, 'white',
-                                         (x * self.cell_size + self.left * map_pos[0],
-                                          y * self.cell_size + self.top * map_pos[1],
+                        pygame.draw.rect(surface, 'white',
+                                         (x * self.cell_size + self.left * map_position[0],
+                                          y * self.cell_size + self.top * map_position[1],
                                           self.cell_size, self.cell_size), 0)
                         self.board.append([x - 11, y - 4])
 
@@ -84,18 +85,18 @@ class Cells():
                              (15 * self.cell_size + self.left + 1,  # 8   15       112         11
                               4 * self.cell_size + self.top + 1,  # 5    4     270          3
                               self.cell_size - 2, self.cell_size - 2), 0)'''
-            screen.blit(image, (15 * self.cell_size + self.left, 4 * self.cell_size + self.top))
+            surface.blit(image, (15 * self.cell_size + self.left - 7, 4 * self.cell_size + self.top - 7))
 
         for y in range(self.height):
             for x in range(self.width):
-                pygame.draw.rect(screen, 'white',
+                pygame.draw.rect(surface, 'white',
                                  (x * self.cell_size + self.left,
                                   y * self.cell_size + self.top,
                                   self.cell_size, self.cell_size), 1)
 
         if mode == 2:
             form_size = get_form_size()
-            pygame.draw.rect(screen, 'grey',
+            pygame.draw.rect(surface, 'grey',
                              (form_size[0] - (form_size[0] / 30 * 5),
                               form_size[1] - (form_size[1] / 37 * 7),
                               form_size[0] - (form_size[0] / 30 * 25),
@@ -117,6 +118,16 @@ class Cells():
             return 1
 
 
+
+'''def draw(self, surf):
+    print(1)
+    bullet_rect = bullets_code.Bullet.bullet.get_rect(center=bullets_code.Bullet.pos)
+    surf.blit(bullets_code.Bullet.bullet, bullet_rect)
+    ibullet_rect = bullets_code.Bullet.ibullet.get_rect(center=bullets_code.Bullet.ipos)
+    surf.blit(bullets_code.Bullet.ibullet, ibullet_rect)
+    iibullet_rect = bullets_code.Bullet.iibullet.get_rect(center=bullets_code.Bullet.iipos)
+    surf.blit(bullets_code.Bullet.iibullet, iibullet_rect)'''
+
 clock = pygame.time.Clock()
 pygame.init()
 
@@ -135,14 +146,18 @@ cells.set_view(50, 50, 50)
 print(monitor_width // 50, (monitor_height - 50) // 50, (monitor_height - 50) // 50)
 print(monitor_height // 50)
 print(monitor_width, monitor_height)----------------------------'''
-tick = 0
+player_tick = 0
+weapons_ready = 1
+weapons_reload_tick = 0
 map_pos = [5, 1]
 player_pos = [0, 0]
 
 running = True
 while running:
-    if tick == 6:
-        tick = 0
+    if player_tick == 6:
+        player_tick = 0
+    if weapons_reload_tick == 46:
+        weapons_reload_tick = 0
     pygame.display.update()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -153,21 +168,25 @@ while running:
             form_values = [event.w, event.h]
             print(event.w // 33, event.h // 20, event.h // 20)
             print(event.w, event.h)------------------------'''
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            #if collidepoint(event.pos):
-            print(cells.get_cell(event.pos))
+        if weapons_ready == 1:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                '''bullets_code.bullets.append(bullets_code.Bullet((15 * cells.cell_size + cells.left) + 14,
+                                                                (4 * cells.cell_size + cells.top) + 14))'''
+                bullets_code.bullets.append(bullets_code.Bullet(814, 264))
+            weapons_ready = 0
 
         if event.type == pygame.MOUSEMOTION:
+            # original_image = pygame.image.load('test copy.png')
             original_image = pygame.image.load('player_test_1.png')
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            rel_x = mouse_x - (15 * cells.cell_size + cells.left + 0)
-            rel_y = mouse_y - (4 * cells.cell_size + cells.top + 0)
+            rel_x = mouse_x - (15 * cells.cell_size + cells.left)
+            rel_y = mouse_y - (4 * cells.cell_size + cells.top)
             angle = math.degrees(-math.atan2(rel_y, rel_x))
             image = pygame.transform.rotate(original_image, int(angle))
             # rect = image.get_rect(center=(70, 70))
             # rect = image.get_rect(center=(25, 25))
 
-    if tick == 5:
+    if player_tick == 5:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LSHIFT]:
             if keys[pygame.K_a]:
@@ -229,11 +248,25 @@ while running:
                 if [player_pos[0], player_pos[1] + 1] not in cells.board:
                     map_pos = [map_pos[0], map_pos[1] - 1]
                     player_pos = [player_pos[0], player_pos[1] + 1]
-    tick += 1
+    player_tick += 1
+    if weapons_ready == 0:
+        weapons_reload_tick += 1
+    if weapons_reload_tick == 45:
+        weapons_ready = 1
+    print(f'weapons_ready:{weapons_ready}')
+    print(f'weapons_reload_tick:{weapons_reload_tick}')
+
+
+    for bullet in bullets_code.bullets[:]:
+        bullet.update()
+        if not screen.get_rect().collidepoint(bullet.pos):
+            bullets_code.bullets.remove(bullet)
 
     screen.fill('black')
     cells.render(screen, map_pos, 0)
     cells.render(screen, map_pos, 1)
+    for bullet in bullets_code.bullets:
+        bullet.draw(screen)
     cells.render(screen, map_pos, 2)
     pygame.display.flip()
     clock.tick(60)
