@@ -25,6 +25,13 @@ class Cells:
         self.left = 10
         self.top = 10
         self.cell_size = 30
+        form_size = get_form_size()
+
+        self.fullscreen_btn = pygame.Rect(form_size[0] - 150, form_size[1] - 150, 150, 150)
+        self.game_screen = pygame.Rect(form_size[0] - (form_size[0] / 30 * 22),
+                                       form_size[1] - (form_size[1] / 37 * 37),
+                                       form_size[0] - (form_size[0] / 30 * 13),
+                                       form_size[1] - (form_size[1] / 37 * 14))
 
     def render(self, surface, map_position, mode):
         '''for y in range(self.height):
@@ -87,12 +94,12 @@ class Cells:
                               self.cell_size - 2, self.cell_size - 2), 0)'''
             surface.blit(image, (15 * self.cell_size + self.left - 7, 4 * self.cell_size + self.top - 7))
 
-        for y in range(self.height):
+        '''for y in range(self.height):
             for x in range(self.width):
                 pygame.draw.rect(surface, 'white',
                                  (x * self.cell_size + self.left,
                                   y * self.cell_size + self.top,
-                                  self.cell_size, self.cell_size), 1)
+                                  self.cell_size, self.cell_size), 1)'''
 
         if mode == 2:
             form_size = get_form_size()
@@ -101,7 +108,68 @@ class Cells:
                               form_size[1] - (form_size[1] / 37 * 7),
                               form_size[0] - (form_size[0] / 30 * 25),
                               form_size[1] - (form_size[1] / 37 * 30)), 0)
-            self.fullscreen_btn = pygame.Rect(form_size[0] - 150, form_size[1] - 150, 150, 150)
+
+            pygame.draw.rect(surface, 'orange',
+                             (form_size[0] - (form_size[0] / 30 * 5),
+                              form_size[1] - (form_size[1] / 37 * 28),
+                              form_size[0] - (form_size[0] / 30 * 27.5),
+                              form_size[1] - (form_size[1] / 37 * 16)), 0)
+
+            pygame.draw.rect(surface, 'red',
+                             (form_size[0] - (form_size[0] / 30 * 2.5),
+                              form_size[1] - (form_size[1] / 37 * 28),
+                              form_size[0] - (form_size[0] / 30 * 27.5),
+                              form_size[1] - (form_size[1] / 37 * 16)), 0)
+
+            pygame.draw.rect(surface, 'white',
+                             (form_size[0] - (form_size[0] / 30 * 5),
+                              form_size[1] - (form_size[1] / 37 * 37),
+                              form_size[0] - (form_size[0] / 30 * 25),
+                              form_size[1] - (form_size[1] / 37 * 28)), 0)
+
+            '''--------------------pygame.draw.rect(surface, (150, 2, 0),
+                             (form_size[0] - (form_size[0] / 30 * 22),
+                              form_size[1] - (form_size[1] / 37 * 37),
+                              form_size[0] - (form_size[0] / 30 * 13),
+                              form_size[1] - (form_size[1] / 37 * 14)), 0)--------------------'''
+
+
+            '''pygame.draw.rect(surface, (150, 2, 0),
+                             (form_size[0] - (form_size[0] / 30 * 22),
+                              form_size[1] - (form_size[1] / 37 * 37),
+                              form_size[0] - (form_size[0] / 30 * 13),
+                              form_size[1] - (form_size[1] / 37 * 1)), 0)'''
+
+
+            pygame.draw.rect(surface, 'purple',
+                             (form_size[0] - (form_size[0] / 30 * 30),
+                              form_size[1] - (form_size[1] / 37 * 37),
+                              form_size[0] - (form_size[0] / 30 * 22),
+                              form_size[1] - (form_size[1] / 37 * 23)), 0)
+
+            pygame.draw.rect(surface, 'cyan',
+                             (form_size[0] - (form_size[0] / 30 * 30),
+                              form_size[1] - (form_size[1] / 37 * 14),
+                              form_size[0] - (form_size[0] / 30 * 22),
+                              form_size[1] - (form_size[1] / 37 * 23)), 0)
+
+            pygame.draw.rect(surface, 'cyan',
+                             (form_size[0] - (form_size[0] / 30 * 30),
+                              form_size[1] - (form_size[1] / 37 * 23),
+                              form_size[0] - (form_size[0] / 30 * 22),
+                              form_size[1] - (form_size[1] / 37 * 23)), 0)
+
+            pygame.draw.rect(surface, 'green',
+                             (form_size[0] - (form_size[0] / 30 * 22),
+                              form_size[1] - (form_size[1] / 37 * 14),
+                              form_size[0] - (form_size[0] / 30 * 13),
+                              form_size[1] - (form_size[1] / 37 * 30)), 0)
+
+            pygame.draw.rect(surface, 'blue',
+                             (form_size[0] - (form_size[0] / 30 * 22),
+                              form_size[1] - (form_size[1] / 37 * 7),
+                              form_size[0] - (form_size[0] / 30 * 13),
+                              form_size[1] - (form_size[1] / 37 * 30)), 0)
 
 
     def set_view(self, left, top, cell_size):
@@ -152,11 +220,18 @@ weapons_reload_tick = 0
 map_pos = [5, 1]
 player_pos = [0, 0]
 
+original_image = pygame.image.load('player_test_2.png')
+mouse_x, mouse_y = pygame.mouse.get_pos()
+rel_x = mouse_x - (15 * cells.cell_size + cells.left)
+rel_y = mouse_y - (4 * cells.cell_size + cells.top)
+angle = math.degrees(-math.atan2(rel_y, rel_x))
+image = pygame.transform.rotate(original_image, int(angle))
+
 running = True
 while running:
     if player_tick == 6:
         player_tick = 0
-    if weapons_reload_tick == 46:
+    if weapons_reload_tick == 2:
         weapons_reload_tick = 0
     pygame.display.update()
     for event in pygame.event.get():
@@ -169,22 +244,24 @@ while running:
             print(event.w // 33, event.h // 20, event.h // 20)
             print(event.w, event.h)------------------------'''
         if weapons_ready == 1:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                '''bullets_code.bullets.append(bullets_code.Bullet((15 * cells.cell_size + cells.left) + 14,
-                                                                (4 * cells.cell_size + cells.top) + 14))'''
-                bullets_code.bullets.append(bullets_code.Bullet(814, 264))
-            weapons_ready = 0
+            if cells.game_screen.collidepoint(pygame.mouse.get_pos()):
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    '''bullets_code.bullets.append(bullets_code.Bullet((15 * cells.cell_size + cells.left) + 14,
+                                                                    (4 * cells.cell_size + cells.top) + 14))'''
+                    bullets_code.bullets.append(bullets_code.Bullet(814, 264))
+                weapons_ready = 0
 
         if event.type == pygame.MOUSEMOTION:
-            # original_image = pygame.image.load('test copy.png')
-            original_image = pygame.image.load('player_test_1.png')
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            rel_x = mouse_x - (15 * cells.cell_size + cells.left)
-            rel_y = mouse_y - (4 * cells.cell_size + cells.top)
-            angle = math.degrees(-math.atan2(rel_y, rel_x))
-            image = pygame.transform.rotate(original_image, int(angle))
-            # rect = image.get_rect(center=(70, 70))
-            # rect = image.get_rect(center=(25, 25))
+            if cells.game_screen.collidepoint(event.pos):
+                # original_image = pygame.image.load('test copy.png')
+                original_image = pygame.image.load('player_test_2.png')
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                rel_x = mouse_x - (15 * cells.cell_size + cells.left)
+                rel_y = mouse_y - (4 * cells.cell_size + cells.top)
+                angle = math.degrees(-math.atan2(rel_y, rel_x))
+                image = pygame.transform.rotate(original_image, int(angle))
+                # rect = image.get_rect(center=(70, 70))
+                # rect = image.get_rect(center=(25, 25))
 
     if player_tick == 5:
         keys = pygame.key.get_pressed()
@@ -251,7 +328,7 @@ while running:
     player_tick += 1
     if weapons_ready == 0:
         weapons_reload_tick += 1
-    if weapons_reload_tick == 45:
+    if weapons_reload_tick == 1:
         weapons_ready = 1
     print(f'weapons_ready:{weapons_ready}')
     print(f'weapons_reload_tick:{weapons_reload_tick}')

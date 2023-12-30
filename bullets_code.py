@@ -1,6 +1,5 @@
 import pygame
 import math
-# import game
 
 
 class Bullet:
