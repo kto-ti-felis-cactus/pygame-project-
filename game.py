@@ -1,6 +1,7 @@
 import pygame
 import math
 import bullets_code
+import animation
 
 
 def load_map():
@@ -15,6 +16,23 @@ def load_map():
 def get_form_size():
     width, height = pygame.display.get_surface().get_size()
     return [width, height]
+
+
+def load_image(name, color_key=None):
+    fullname = name
+    try:
+        image = pygame.image.load(fullname)
+    except pygame.error as message:
+        print('Cannot load image:', name)
+        raise SystemExit(message)
+
+    if color_key is not None:
+        if color_key == -1:
+            color_key = image.get_at((0, 0))
+        image.set_colorkey(color_key)
+    else:
+        image = image.convert_alpha()
+    return image
 
 
 class Cells:
@@ -92,7 +110,7 @@ class Cells:
                              (15 * self.cell_size + self.left + 1,  # 8   15       112         11
                               4 * self.cell_size + self.top + 1,  # 5    4     270          3
                               self.cell_size - 2, self.cell_size - 2), 0)'''
-            surface.blit(image, (15 * self.cell_size + self.left - 7, 4 * self.cell_size + self.top - 7))
+            surface.blit(image, (15 * self.cell_size + self.left - 10, 4 * self.cell_size + self.top - 10))
 
         '''for y in range(self.height):
             for x in range(self.width):
@@ -219,6 +237,10 @@ weapons_ready = 1
 weapons_reload_tick = 0
 map_pos = [5, 1]
 player_pos = [0, 0]
+all_sprites = pygame.sprite.Group()
+dragon = animation.AnimatedSprite(load_image("player_test_2_1.png"), 4, 1,
+                                  15 * cells.cell_size + cells.left - 10,
+                                  4 * cells.cell_size + cells.top - 10)
 
 original_image = pygame.image.load('player_test_2.png')
 mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -260,8 +282,9 @@ while running:
                 rel_y = mouse_y - (4 * cells.cell_size + cells.top)
                 angle = math.degrees(-math.atan2(rel_y, rel_x))
                 image = pygame.transform.rotate(original_image, int(angle))
-                # rect = image.get_rect(center=(70, 70))
                 # rect = image.get_rect(center=(25, 25))
+
+                image = pygame.transform.rotate(dragon.image, int(angle))
 
     if player_tick == 5:
         keys = pygame.key.get_pressed()
@@ -325,6 +348,8 @@ while running:
                 if [player_pos[0], player_pos[1] + 1] not in cells.board:
                     map_pos = [map_pos[0], map_pos[1] - 1]
                     player_pos = [player_pos[0], player_pos[1] + 1]
+        image = pygame.transform.rotate(dragon.image, int(angle))
+
     player_tick += 1
     if weapons_ready == 0:
         weapons_reload_tick += 1
@@ -341,7 +366,13 @@ while running:
 
     screen.fill('black')
     cells.render(screen, map_pos, 0)
+    '''cells.render(screen, map_pos, 1)'''
+
+    # animation.all_sprites.draw(screen)
     cells.render(screen, map_pos, 1)
+    animation.all_sprites.update()
+
+
     for bullet in bullets_code.bullets:
         bullet.draw(screen)
     cells.render(screen, map_pos, 2)
