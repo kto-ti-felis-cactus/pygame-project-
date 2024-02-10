@@ -1,0 +1,7 @@
+name--victor
+weapon_in_inventory--1;5
+weapon_not_in_inventory--2;3;4;6;7;8;9;10;11
+health--10
+location--1
+complexity--2
+very_important_number--3

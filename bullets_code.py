@@ -3,60 +3,78 @@ import math
 
 
 class Bullet:
-    def __init__(self, x, y):
-        self.pos = (x, y)
-        self.ipos = (x, y)
-        self.iipos = (x, y)
-        mx, my = pygame.mouse.get_pos()
+    def __init__(self, x, y, mode, target, map_position, cell_size, left, top, shooter):
+        self.mode = mode
+        self.cell_size = cell_size
+        self.left = left
+        self.top = top
+        # self.self_position = self_position
+        self.x, self.y = x, y
+        self.shooter = shooter
+        if self.mode == 0:
+            target_x, target_y = pygame.mouse.get_pos()
+        elif self.mode == 1:
+            if target != '[NULL]':
+                if target.type_of_entity == '[player]':
+                    target_x, target_y = ((15 * self.cell_size + self.left) + 14, (4 * self.cell_size + self.top) + 14)
+                else:
+                    target_x, target_y = ((map_position[0] * self.cell_size + self.left * target.position[0]) + 20,
+                                          (map_position[1] * self.cell_size + self.top * (target.position[1] + 4)) + 10)
+                '''(map_position[0] * self.cell_size +
+                 self.left * i.position[0]) - 20,
+                (map_position[1] * self.cell_size +
+                 self.top * (i.position[1] + 4)) - 10)'''
 
-        self.dir = (mx - x, my - y)
-        self.idir = (mx - (x - 10), my - (y - 10))
-        self.iidir = (mx - (x + 10), my - (y + 10))
+        self.bullets_parameters = [[(self.x, self.y), 0, 0, 0],
+                                   [(self.x, self.y), 0, 0, 0],
+                                   [(self.x, self.y), 0, 0, 0]]
 
-        length = math.hypot(*self.dir)
-        ilength = math.hypot(*self.idir)
-        iilength = math.hypot(*self.iidir)
-        if length == 0.0:
-            self.dir = (0, -1)
-            self.idir = (0, -1)
-            self.iidir = (0, -1)
-        else:
-            self.dir = (self.dir[0]/length, self.dir[1]/length)
-            self.idir = (self.idir[0]/ilength, self.idir[1]/ilength)
-            self.iidir = (self.iidir[0]/iilength, self.iidir[1]/iilength)
+        for i in self.bullets_parameters:
+            if self.bullets_parameters.index(i) == 0:
+                i[1] = (target_x - self.x, target_y - self.y)
+            elif self.bullets_parameters.index(i) == 1:
+                i[1] = (target_x - (self.x - 10), target_y - (self.y - 10))
+            elif self.bullets_parameters.index(i) == 2:
+                i[1] = (target_x - (self.x + 10), target_y - (self.y + 10))
 
-        angle = math.degrees(math.atan2(-self.dir[1], self.dir[0]))
-        iangle = math.degrees(math.atan2(-self.idir[1], self.idir[0]))
-        iiangle = math.degrees(math.atan2(-self.iidir[1], self.iidir[0]))
+        for i in self.bullets_parameters:
+            if self.bullets_parameters.index(i) == 0:
+                i[2] = math.hypot(*i[1])
+            elif self.bullets_parameters.index(i) == 1:
+                i[2] = math.hypot(*i[1])
+            elif self.bullets_parameters.index(i) == 2:
+                i[2] = math.hypot(*i[1])
 
-        self.bullet = pygame.Surface((7, 2)).convert_alpha()
-        self.bullet.fill((255, 255, 255))
-        self.bullet = pygame.transform.rotate(self.bullet, angle)
+        for i in self.bullets_parameters:
+            if i[2] == 0.0:
+                i[1] = (0, -1)
+            else:
+                i[1] = (i[1][0] / i[2], i[1][1] / i[2])
 
-        self.ibullet = pygame.Surface((7, 2)).convert_alpha()
-        self.ibullet.fill((255, 255, 255))
-        self.ibullet = pygame.transform.rotate(self.ibullet, iangle)
+        for i in self.bullets_parameters:
+            i[2] = math.degrees(math.atan2(-i[1][1], i[1][0]))
 
-        self.iibullet = pygame.Surface((7, 2)).convert_alpha()
-        self.iibullet.fill((255, 255, 255))
-        self.iibullet = pygame.transform.rotate(self.iibullet, iiangle)
+        for i in self.bullets_parameters:
+            i[3] = pygame.Surface((7, 2)).convert_alpha()
+            i[3].fill((255, 255, 255))
+            i[3] = pygame.transform.rotate(i[3], i[2])
         self.speed = 45
 
-    def update(self):
-        self.pos = (self.pos[0]+self.dir[0] * self.speed,
-                    self.pos[1]+self.dir[1] * self.speed)
-        self.ipos = (self.ipos[0] + self.idir[0] * self.speed,
-                    self.ipos[1] + self.idir[1] * self.speed)
-        self.iipos = (self.iipos[0] + self.iidir[0] * self.speed,
-                    self.iipos[1] + self.iidir[1] * self.speed)
+    def update(self, map_position):
+        for i in self.bullets_parameters:
+            if self.shooter == 'player':
+                i[0] = (i[0][0] + i[1][0] * self.speed, i[0][1] + i[1][1] * self.speed)
+            else:
+                i[0] = ((map_position[0] * self.cell_size + self.left) + (i[0][0] + i[1][0] * self.speed),
+                        (map_position[1] * self.cell_size + self.left) + (i[0][1] + i[1][1] * self.speed))
 
-    def draw(self, surf):
-        bullet_rect = self.bullet.get_rect(center=self.pos)
-        surf.blit(self.bullet, bullet_rect)
-        ibullet_rect = self.ibullet.get_rect(center=self.ipos)
-        surf.blit(self.ibullet, ibullet_rect)
-        iibullet_rect = self.iibullet.get_rect(center=self.iipos)
-        surf.blit(self.iibullet, iibullet_rect)
+    def draw(self, surf, map_position):
+        for i in self.bullets_parameters:
+            bullet_rect = i[3].get_rect(center=i[0])
+            surf.blit(i[3], bullet_rect)
+            if self.shooter != 'player':
+                i[0] = (i[0][0] - (map_position[0] * self.cell_size + self.left),
+                        i[0][1] - (map_position[1] * self.cell_size + self.left))
 
 
 bullets = []

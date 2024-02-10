@@ -1,8 +1,22 @@
+npc_objects:[gbfgb(Human 9 0 False 4 1 [36 8] entities 'gbfgb' player.position animation.AnimatedSprite(load_image('npc_human_1.png') 4 1 0 0) cells.board);
+             fadhj(Human 2 -4 False 4 2 [17 9] entities 'fadhj' player.position animation.AnimatedSprite(load_image('npc_human_1.png') 4 1 0 0) cells.board);
+             iiicj(Human 6 -4 False 9 1 [1 1] entities 'iiicj' player.position animation.AnimatedSprite(load_image('npc_human_1.png') 4 1 0 0) cells.board);
+             cdbib(Human 4 -2 False 9 2 [1 2] entities 'cdbib' player.position animation.AnimatedSprite(load_image('npc_human_1.png') 4 1 0 0) cells.board);
+             cbebb(Cuscas 7 -5 False 3 3 [1 4] entities 'cbebb' player.position animation.AnimatedSprite(load_image('npc_cuscas_1.png') 4 1 0 0) cells.board);
+             jiebj(Cuscas 10 0 False 3 3 [1 3] entities 'jiebj' player.position animation.AnimatedSprite(load_image('npc_cuscas_1.png') 4 1 0 0) cells.board);
+             ibjac(Cuscas 9 -2 False 3 3 [1 7] entities 'ibjac' player.position animation.AnimatedSprite(load_image('npc_cuscas_1.png') 4 1 0 0) cells.board);
+             dbdca(Cuscas 6 -1 False 3 3 [3 3] entities 'dbdca' player.position animation.AnimatedSprite(load_image('npc_cuscas_1.png') 4 1 0 0) cells.board);
+             cagcf(Cuscas 9 -5 False 3 3 [1 5] entities 'cagcf' player.position animation.AnimatedSprite(load_image('npc_cuscas_1.png') 4 1 0 0) cells.board);
+             djfda(Cuscas 10 -3 False 3 3 [26 5] entities 'djfda' player.position animation.AnimatedSprite(load_image('npc_cuscas_1.png') 4 1 0 0) cells.board);
+             ccjhj(Cuscas 4 -3 False 3 3 [5 4] entities 'ccjhj' player.position animation.AnimatedSprite(load_image('npc_cuscas_1.png') 4 1 0 0) cells.board);
+             jigfg(Robot 5 -3 False 9 2 [37 7] entities 'jigfg' player.position animation.AnimatedSprite(load_image('npc_robot_1.png') 4 1 0 0) cells.board);
+             player]:
+-</>-
 2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,_,_,_,_,_,_,_,_,_,2,2,2,2,2,2,2,2,2,2
 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,_,_,_,_,_,_,_,_,_,2,1,1,1,1,1,1,1,1,2
 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,2
 2,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,0,0,0,1,1,1,1,1,1,2
-2,0,0,0,0,p,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,1,1,1,1,1,1,2
+2,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,1,1,1,1,1,1,2
 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,1,0,0,0,0,1,1,1,1,1,1,2
 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,2
 2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,_,_,_,_,_,_,_,_,_,2,2,0,2,0,2,0,2,2,2
