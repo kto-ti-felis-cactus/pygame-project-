@@ -8,7 +8,6 @@ class Bullet:
         self.cell_size = cell_size
         self.left = left
         self.top = top
-        # self.self_position = self_position
         self.x, self.y = x, y
         self.shooter = shooter
         if self.mode == 0:
@@ -20,10 +19,6 @@ class Bullet:
                 else:
                     target_x, target_y = ((map_position[0] * self.cell_size + self.left * target.position[0]) + 20,
                                           (map_position[1] * self.cell_size + self.top * (target.position[1] + 4)) + 10)
-                '''(map_position[0] * self.cell_size +
-                 self.left * i.position[0]) - 20,
-                (map_position[1] * self.cell_size +
-                 self.top * (i.position[1] + 4)) - 10)'''
 
         self.bullets_parameters = [[(self.x, self.y), 0, 0, 0],
                                    [(self.x, self.y), 0, 0, 0],

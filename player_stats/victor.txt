@@ -1,7 +1,8 @@
 name--victor
-weapon_in_inventory--1;5
-weapon_not_in_inventory--2;3;4;6;7;8;9;10;11
+weapon_in_inventory--5
 health--10
 location--1
+complexity_tick--25
 complexity--2
 very_important_number--3
+stats--85

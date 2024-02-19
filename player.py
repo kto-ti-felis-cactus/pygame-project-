@@ -1,6 +1,3 @@
-import pygame
-
-
 class Player:
     def __init__(self, stats_path, position, image_name):
         self.stats_path = stats_path
@@ -8,6 +5,7 @@ class Player:
         self.type_of_entity = '[player]'
         self.player_data = {}
         self.image_class = image_name
+        self.health = 10
 
     def read_player_stats(self):
         file = open(fr'player_stats\{self.stats_path}.txt', 'r', encoding='utf-8')
