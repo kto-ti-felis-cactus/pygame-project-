@@ -6,6 +6,7 @@ class Player:
         self.player_data = {}
         self.image_class = image_name
         self.health = 10
+        self.score = 0
 
     def read_player_stats(self):
         file = open(fr'player_stats\{self.stats_path}.txt', 'r', encoding='utf-8')
@@ -14,10 +15,13 @@ class Player:
         file.close()
 
     def write_player_stats(self):
-        file = open(fr'{self.stats_path}.txt', 'w', encoding='utf-8')
+        file = open(fr'player_stats\{self.stats_path}.txt', 'w', encoding='utf-8')
         output = ''
         for i in self.player_data.keys():
             output += f'{i}--{self.player_data[i]}\n'
+        output = output.split('\n')
+        output = output[:-1]
+        output = '\n'.join(output)
         file.write(output)
         file.close()
 

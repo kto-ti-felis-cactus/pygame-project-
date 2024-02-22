@@ -153,27 +153,6 @@ class Human(Entity):
                             self.position = [self.position[0], self.position[1] - 1]
             else:
                 self.position = [self.position[0], self.position[1]]
-                '''if abs(self.enemy_position[0] - self.position[0]) != 5:
-                    if self.enemy_position[0] > self.position[0]:
-                        if [self.position[0] + 1 - 11, self.position[1] - 4] not in self.board:
-                            self.position = [self.position[0] + 1, self.position[1]]
-
-                    elif self.enemy_position[0] < self.position[0]:
-                        if [self.position[0] - 1 - 11, self.position[1] - 4] not in self.board:
-                            self.position = [self.position[0] - 1, self.position[1]]
-                else:
-                    self.position = [self.position[0], self.position[1]]
-
-                if abs(self.enemy_position[1] - self.position[1]) != 5:
-                    if self.enemy_position[1] > self.position[1]:
-                        if [self.position[0] - 11, self.position[1] + 1 - 4] not in self.board:
-                            self.position = [self.position[0], self.position[1] + 1]
-
-                    elif self.enemy_position[1] < self.position[1]:
-                        if [self.position[0] - 11, self.position[1] - 1 - 4] not in self.board:
-                            self.position = [self.position[0], self.position[1] - 1]
-                else:
-                    self.position = [self.position[0], self.position[1]]'''
 
     def kill(self):
         self.is_dead = True
@@ -232,12 +211,6 @@ class Cuscas(Entity):
         self.angle = 0
         self.board = board
         self.perseverance(player_pos)
-        '''
-        self.image_class = image_class
-        self.image = image_class.image
-        self.angle = 0
-        self.board = board
-        '''
 
     def perseverance(self, player_pos):
         self.update_danger()
@@ -333,38 +306,6 @@ class Cuscas(Entity):
                             self.position = [self.position[0], self.position[1] - 1]
             else:
                 self.position = [self.position[0], self.position[1]]
-
-            '''if self.enemy_position[0] > self.position[0]:
-                self.position = [self.position[0] + 1, self.position[1]]
-            elif self.enemy_position[0] < self.position[0]:
-                self.position = [self.position[0] - 1, self.position[1]]
-            elif self.enemy_position[0] == self.position[0]:
-                self.position = [self.position[0], self.position[1]]
-
-            if self.enemy_position[1] > self.position[1]:
-                self.position = [self.position[0], self.position[1] + 1]
-            elif self.enemy_position[1] < self.position[1]:
-                self.position = [self.position[0], self.position[1] - 1]
-            elif self.enemy_position[1] == self.position[1]:
-                self.position = [self.position[0], self.position[1]]
-        elif self.target == 'destroy danger':
-            if self.max_danger[0] != '[NULL]':
-                self.enemy = self.max_danger[0]
-                self.enemy_position = eval(self.enemy).position
-
-                if self.enemy_position[0] > self.position[0]:
-                    self.position = [self.position[0] + 1, self.position[1]]
-                elif self.enemy_position[0] < self.position[0]:
-                    self.position = [self.position[0] - 1, self.position[1]]
-                elif self.enemy_position[0] == self.position[0]:
-                    self.position = [self.position[0], self.position[1]]
-
-                if self.enemy_position[1] > self.position[1]:
-                    self.position = [self.position[0], self.position[1] + 1]
-                elif self.enemy_position[1] < self.position[1]:
-                    self.position = [self.position[0], self.position[1] - 1]
-                elif self.enemy_position[1] == self.position[1]:
-                    self.position = [self.position[0], self.position[1]]'''
 
     def kill(self):
         self.is_dead = True
