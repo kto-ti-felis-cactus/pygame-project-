@@ -135,6 +135,7 @@ class Cells:
 
         for y in range(len(self.map)):
             for x in range(len(self.map[y])):
+                print(y, x)
                 if list(self.map[y][x])[0] == '0':
                     self.list_cells_image_id[y].append('0')
                 elif list(self.map[y][x])[0] == '1':
