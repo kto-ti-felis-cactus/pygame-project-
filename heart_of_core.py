@@ -146,7 +146,7 @@ class Cells:
                     self.list_cells_image_id[y].append('3')
                 elif list(self.map[y][x])[0] == '_':
                     self.list_cells_image_id[y].append('_')
-                self.create_map_entities()
+        self.create_map_entities()
 
     def create_map_entities(self):
         self.map_entities = self.data_map[0]
@@ -156,36 +156,43 @@ class Cells:
         self.map_entities = edit_map_entities(self.map_entities)
 
     def render(self, surface, map_position, mode):
+        form_size = get_form_size()
         if mode == 0:
             texture_surface = pygame.Surface((len(self.map[0]) * 50, len(self.map) * 50))
 
             for y in range(len(self.map)):
                 for x in range(len(self.map[y])):
                     if self.map[y][x] == '0':
-                        if self.game_screen.collidepoint((x * self.cell_size + self.left * map_position[0],
-                                                          y * self.cell_size + self.left * map_position[1])):
+                        if self.game_screen.collidepoint((map_position[0] * self.cell_size + self.cell_size * x,
+                                                          map_position[1] * self.cell_size + self.cell_size * y)):
                             texture_surface.blit(load_image('hell_path_0.png'),
-                                                 (x * self.cell_size + self.left * map_position[0],
-                                                  y * self.cell_size + self.left * map_position[1]))
+                                                 (map_position[0] * self.cell_size + self.cell_size * x,
+                                                  map_position[1] * self.cell_size + self.cell_size * y))
                     elif self.map[y][x] == '1':
-                        if self.game_screen.collidepoint((x * self.cell_size + self.left * map_position[0],
-                                                          y * self.cell_size + self.left * map_position[1])):
+                        if self.game_screen.collidepoint((map_position[0] * self.cell_size + self.cell_size * x,
+                                                          map_position[1] * self.cell_size + self.cell_size * y)):
                             texture_surface.blit(self.list_cells_image_id[y][x],
-                                                 (x * self.cell_size + self.left * map_position[0],
-                                                  y * self.cell_size + self.left * map_position[1]))
-            surface.blit(texture_surface, (0, 0))
+                                                 (map_position[0] * self.cell_size + self.cell_size * x,
+                                                  map_position[1] * self.cell_size + self.cell_size * y))
+
+            surface.blit(texture_surface, ((1680 - form_size[0]) * -1, (1000 - form_size[1]) * -1))
+            # (form_size[0] / 1680 - 1, form_size[1] / 1000 - 1)
 
         elif mode == 1:
+
             for i in entities:
                 if i != 'player':
-                    if self.game_screen.collidepoint((map_position[0] * self.cell_size + self.left * i.position[0] -
-                                                      11) - 20, (map_position[1] * self.cell_size + self.top *
-                                                                 (i.position[1] + 4 - 4)) - 10):
-                        surface.blit(i.image, ((map_position[0] * self.cell_size + self.left * i.position[0] - 11) - 20,
-                                               (map_position[1] * self.cell_size + self.top *
-                                                (i.position[1] + 4 - 4)) - 10))  # 4
+                    if self.game_screen.collidepoint((map_position[0] * self.cell_size + self.cell_size *
+                                                      i.position[0] - 11) - 20, (map_position[1] * self.cell_size +
+                                                                                 self.cell_size *
+                                                                                 (i.position[1] + 4 - 4)) - 10):
+                        surface.blit(i.image, ((map_position[0] * self.cell_size + self.cell_size * i.position[0] -
+                                                11) - (form_size[0] / 84), (map_position[1] * self.cell_size +
+                                                                            self.cell_size * (i.position[1] + 4 - 4)) -
+                                               (form_size[1] / 100)))
 
-            surface.blit(image, (15 * self.cell_size + self.left - 10, 4 * self.cell_size + self.top - 10))
+            surface.blit(image, (15 * self.cell_size + self.cell_size - (1680 - form_size[0]),
+                                 4 * self.cell_size + self.cell_size - (1000 - form_size[1])))
 
         if mode == 2:
             form_size = get_form_size()
@@ -193,11 +200,7 @@ class Cells:
             pygame.draw.rect(surface, (20, 20, 20), (0, form_size[1] / 5 * 4, form_size[0], form_size[1] / 5 * 1), 0)
 
             image_interface = load_image("back_to_menu.png")
-            image_interface = pygame.transform.scale(image_interface, (form_size[0] / 10 * 1, form_size[1] / 5 * 1))
-            surface.blit(image_interface, (form_size[0] / 10 * 9, form_size[1] / 5 * 4))
-
-            image_interface = load_image("inventory_button.png")
-            image_interface = pygame.transform.scale(image_interface, (form_size[0] / 10 * 1, form_size[1] / 5 * 1))
+            image_interface = pygame.transform.scale(image_interface, (form_size[0] / 10 * 2, form_size[1] / 5 * 1))
             surface.blit(image_interface, (form_size[0] / 10 * 8, form_size[1] / 5 * 4))
 
             image_interface = load_image("big_shotgun.png")
@@ -241,7 +244,6 @@ pygame.init()
 display_info = pygame.display.Info()
 monitor_width = display_info.current_w
 monitor_height = display_info.current_h
-'''------------------form_values = [monitor_width, monitor_height - 50]------------------'''
 
 screen = pygame.display.set_mode((monitor_width, monitor_height - 50), pygame.RESIZABLE)
 pygame.display.set_caption('40 Degrees Of Hell')
@@ -292,7 +294,7 @@ while running:
                 if event.type == pygame.VIDEORESIZE:
                     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                     image2 = pygame.transform.smoothscale(image, (event.w, event.h))
-                    image3 = pygame.transform.scale(image1, (event.w / 4.2, event.h / 2))  # 4.2  2
+                    image3 = pygame.transform.scale(image1, (event.w / 4.2, event.h / 2))
                     form_size = get_form_size()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if new_game_button.collidepoint(pygame.mouse.get_pos()):
@@ -481,17 +483,13 @@ while running:
 
         cells = Cells(11, 11)
         cells.set_view(50, 50, 50)
-        '''----------------------------cells.set_view(50, 50, (monitor_height - 50) // 20)----------------------------'''
-        '''----------------------------print(monitor_width // 33, (monitor_height - 50) // 20, (monitor_height - 50) // 20)
-        print(monitor_width // 50, (monitor_height - 50) // 50, (monitor_height - 50) // 50)
-        print(monitor_height // 50)
-        print(monitor_width, monitor_height)----------------------------'''
         tick = 5
         weapons_ready = 1
         weapons_reload_tick = 0
         npc_weapon_tick = 0
         map_pos = [5, 1]
         begin = 1
+        win = False
         active = False
         bullets_counter = 8
         bullet_shotgun = load_image("shotgun_bullet.png")
@@ -516,7 +514,66 @@ while running:
 
         run = True
         while run:
+            if win:
 
+                cells.create_map()
+
+                player = player_file_code.Player(name, [0, 0],
+                                                 animation.AnimatedSprite(load_image("player_test_2_1.png"), 4, 1, 0,
+                                                                          0))
+                player.read_player_stats()
+                NPCWork.create_npc(player.player_data['location'], player.player_data['complexity'],
+                                   player.player_data['very_important_number'])
+                player_angle = 0
+                map_pos = [5, 1]
+                begin = 1
+                win = False
+                active = False
+                bullets_counter = 8
+                bullet_shotgun = load_image("shotgun_bullet.png")
+                bullet_shotgun_rect = pygame.Rect(form_size[0] / 10 * 6, form_size[1] / 5 * 4.5, 73, 28)
+
+                entities = []
+                for i in cells.map_entities:
+                    exec(i)
+
+                for i in cells.map_entities:
+                    if i != 'player':
+                        entities.append(eval(i.split(' = ')[0]))
+                    else:
+                        entities.append('player')
+
+                for i in entities:
+                    if i != 'player':
+                        i.update_danger()
+                small_run = True
+                player.update_score()
+                player.write_player_stats()
+                while small_run:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            small_run = False
+                        if event.type == pygame.VIDEORESIZE:
+                            screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                            form_size = get_form_size()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            small_run = False
+                    screen.fill('black')
+                    screen.blit(pygame.transform.smoothscale(load_image('backround_main_menu.png'),
+                                                             (form_size[0], form_size[1])), (0, 0))
+
+                    font = pygame.font.Font(None, (round((form_size[0] + form_size[1]) / 17.8)))
+
+                    text = font.render('победа', True, 'white')
+                    screen.blit(text, (form_size[0] / 3 - round((form_size[0] + form_size[1]) / 17.8),
+                                       form_size[1] / 3 - round((form_size[0] + form_size[1]) / 17.8)))
+
+                    font = pygame.font.Font(None, (round((form_size[0] + form_size[1]) / 26.8)))
+
+                    text = font.render(f'вы набрали {player.score} очков', True, 'white')
+                    screen.blit(text, (form_size[0] / 3 - round((form_size[0] + form_size[1]) / 26.8),
+                                       form_size[1] / 3 * 2 - round((form_size[0] + form_size[1]) / 26.8)))
+                    pygame.display.flip()
             texts = []
 
             font = pygame.font.Font(None, (round((form_size[0] + form_size[1]) / 85)))
@@ -541,16 +598,17 @@ while running:
                     run = False
                 if event.type == pygame.VIDEORESIZE:
                     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                    '''------------------------cells.set_view(50, 50, event.h // 21)
-                    form_values = [event.w, event.h]
-                    print(event.w // 33, event.h // 20, event.h // 20)
-                    print(event.w, event.h)------------------------'''
+                    cells.set_view(event.w / 33.6, event.h / 20, 50)
                     form_size = get_form_size()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         if pygame.Rect(form_size[0] / 10 * 5, form_size[1] / 5 * 4, form_size[0] / 10 * 3,
                                        form_size[1] / 5 * 1).collidepoint(event.pos):
                             active = True
+                        if pygame.Rect(form_size[0] / 10 * 8, form_size[1] / 5 * 4, form_size[0] / 10 * 2,
+                                       form_size[1] / 5 * 1).collidepoint(event.pos):
+                            start_game = False
+                            run = False
 
                 if event.type == pygame.MOUSEBUTTONUP:
                     if event.button == 1:
@@ -569,8 +627,8 @@ while running:
                         if event.type == pygame.MOUSEBUTTONDOWN:
                             if bullets_counter != 0:
                                 bullets_code.bullets.append(
-                                    bullets_code.Bullet((15 * cells.cell_size + cells.left) + 14,
-                                                        (4 * cells.cell_size + cells.top) + 14, 0,
+                                    bullets_code.Bullet(15 * cells.cell_size + cells.cell_size - (1680 - form_size[0]),
+                                                        4 * cells.cell_size + cells.cell_size - (1000 - form_size[1]), 0,
                                                         '[NULL]', map_pos, cells.cell_size,
                                                         cells.left, cells.top, 'player'))
                                 bullets_counter -= 1
@@ -661,13 +719,14 @@ while running:
                     bullets_code.bullets.remove(bullet)
                 else:
                     for i in cells.board:
-                        coliderect = pygame.Rect((i[0] + 11) * cells.cell_size + cells.left * map_pos[0],
-                                                 (i[1] + 4) * cells.cell_size + cells.top * map_pos[1],
+                        coliderect = pygame.Rect((i[0] + 11) * cells.cell_size + cells.cell_size * map_pos[0],
+                                                 (i[1] + 4) * cells.cell_size + cells.cell_size * map_pos[1],
                                                  cells.cell_size, cells.cell_size)
                         if coliderect.collidepoint(bullet.bullets_parameters[0][0]):
                             bullets_code.bullets.remove(bullet)
 
             if tick == 5:
+                counter = 0
                 for i in entities:
                     if i != 'player':
                         if i.is_dead is False:
@@ -675,6 +734,7 @@ while running:
                             i.angle = rotate_object(i.max_danger[0], i)
                             i.image = pygame.transform.rotate(i.image_class.image, int(i.angle))
                         else:
+                            counter += 1
                             if i.type_of_entity == '[human]':
                                 i.set_image(animation.AnimatedSprite(load_image("npc_human_corpse_1.png"), 1, 1, 0, 0))
                                 i.image = pygame.transform.rotate(i.image_class.image, int(i.angle))
@@ -684,6 +744,9 @@ while running:
                             elif i.type_of_entity == '[robot]':
                                 i.set_image(animation.AnimatedSprite(load_image("npc_robot_corpse_1.png"), 1, 1, 0, 0))
                                 i.image = pygame.transform.rotate(i.image_class.image, int(i.angle))
+                if counter == len(entities) - 1:
+                    win = True
+                del counter
 
             for i in entities:
                 if i != 'player':
@@ -731,6 +794,7 @@ while running:
 
                     if player.health == 0:
                         run, start_game, small_run = False, False, True
+                        player.update_score()
                         player.write_player_stats()
                         while small_run:
                             for event in pygame.event.get():

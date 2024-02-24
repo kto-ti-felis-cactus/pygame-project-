@@ -25,6 +25,10 @@ class Player:
         file.write(output)
         file.close()
 
+    def update_score(self):
+        self.player_data['score'] = float(self.player_data['score']) + self.score
+        self.score = 0
+
     def set_image(self, image_name):
         self.image_class = image_name
 
