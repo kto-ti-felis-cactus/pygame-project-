@@ -2,10 +2,9 @@ from random import randint
 
 
 def gen_mat():
-    matheight = randint(20,40)
+    matheight = randint(20, 40)
     matlenght = randint(30, 40)
     mat = []
-    print(matheight, matlenght)
     for i in range(matheight):
         mat.append(['2'] * matlenght)
     for i in range(1, matheight - 1):
@@ -25,7 +24,7 @@ def gen_void(levelmat, count):
             xtmp = x
             ytmp += 1
             for o in range(roomlenght):
-                levelmat[ytmp][xtmp] = '-'
+                levelmat[ytmp][xtmp] = '_'
                 xtmp += 1
     return levelmat
 
@@ -38,15 +37,15 @@ def save_level(levelmat, levelname):
                 levelline += (o + ',')
             levelline = levelline[0:len(levelline) - 1]
             level.write(levelline + '\n')
+    with open(f'{levelname}.txt', 'r', encoding='utf-8') as level:
+        data = level.read().split('\n')
+        data = data[:-2]
+    with open(f'{levelname}.txt', 'w', encoding='utf-8') as level:
+        level.write('\n'.join(data))
 
 
-while input('Создать уровень? - Да\Нет\n') != 'Нет':
+
+def start_process_create_level():
     mat = gen_mat()
-    rmat = gen_void(mat, int(input('Кол-во пустот (могут пересекаться в одну большую)\n')))
-    for i in rmat:
-        print(i)
-    if input('сохранить уровень? - Да\Нет\n') == 'Да':
-        save_level(rmat, input('напишите название уровня\n'))
-    else:
-        print('ок')
-
+    rmat = gen_void(mat, randint(1, 15))
+    save_level(rmat, '1')

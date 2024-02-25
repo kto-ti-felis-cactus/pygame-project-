@@ -6,6 +6,7 @@ import animation
 import ai
 import NPCWork
 import player as player_file_code
+import level_generator
 
 
 def rotate_player():
@@ -135,7 +136,6 @@ class Cells:
 
         for y in range(len(self.map)):
             for x in range(len(self.map[y])):
-                print(y, x)
                 if list(self.map[y][x])[0] == '0':
                     self.list_cells_image_id[y].append('0')
                 elif list(self.map[y][x])[0] == '1':
@@ -177,7 +177,6 @@ class Cells:
                                                   map_position[1] * self.cell_size + self.cell_size * y))
 
             surface.blit(texture_surface, ((1680 - form_size[0]) * -1, (1000 - form_size[1]) * -1))
-            # (form_size[0] / 1680 - 1, form_size[1] / 1000 - 1)
 
         elif mode == 1:
 
@@ -262,7 +261,6 @@ image3 = pygame.transform.scale(image1, (form_size[0] / 4.2, form_size[1] / 2)) 
 image2 = pygame.transform.smoothscale(image, (form_size[0], form_size[1]))
 
 running = True
-
 while running:
     if not start_game:
         if tick == 28:
@@ -474,16 +472,20 @@ while running:
 
         pygame.display.flip()
     else:
+        level_generator.start_process_create_level()
+
         player = player_file_code.Player(name, [0, 0],
                                          animation.AnimatedSprite(load_image("player_test_2_1.png"), 4, 1, 0,
                                                                   0))
         player.read_player_stats()
         NPCWork.create_npc(player.player_data['location'], player.player_data['complexity'],
                            player.player_data['very_important_number'])
+
         player_angle = 0
 
         cells = Cells(11, 11)
         cells.set_view(50, 50, 50)
+
         tick = 5
         weapons_ready = 1
         weapons_reload_tick = 0
@@ -517,7 +519,7 @@ while running:
         while run:
             if win:
 
-                cells.create_map()
+                level_generator.start_process_create_level()
 
                 player = player_file_code.Player(name, [0, 0],
                                                  animation.AnimatedSprite(load_image("player_test_2_1.png"), 4, 1, 0,
@@ -525,6 +527,8 @@ while running:
                 player.read_player_stats()
                 NPCWork.create_npc(player.player_data['location'], player.player_data['complexity'],
                                    player.player_data['very_important_number'])
+                cells.create_map()
+
                 player_angle = 0
                 map_pos = [5, 1]
                 begin = 1
