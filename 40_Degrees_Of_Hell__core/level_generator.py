@@ -2,29 +2,26 @@ from random import randint
 
 
 def gen_mat():
-    matheight = randint(10, 20)
-    matlenght = randint(20, 30)
+    matheight = randint(40, 80)
+    matlenght = randint(40, 80)
     mat = []
     for i in range(matheight):
-        mat.append(['2'] * matlenght)
-    for i in range(1, matheight - 1):
-        for o in range(1, matlenght - 1):
-            mat[i][o] = '1'
+        mat.append(['_'] * matlenght)
     return mat
 
 
-def gen_void(levelmat, count):
+def gen_room(levelmat, count):
     for c in range(count):
-        roomheight = randint(1, 5)
-        roomlenght = randint(1, 15)
-        x = randint(1, len(levelmat[0]) - roomlenght - 1)
-        y = randint(1, len(levelmat) - roomheight - 1)
+        roomheight = randint(8, 10)
+        roomlenght = randint(5, 15)
+        x = randint(1, len(levelmat[0]) - roomlenght - 15)
+        y = randint(1, len(levelmat) - roomheight - 10)
         ytmp = y
         for i in range(roomheight):
             xtmp = x
             ytmp += 1
             for o in range(roomlenght):
-                levelmat[ytmp][xtmp] = '_'
+                levelmat[ytmp][xtmp] = str(randint(0, 1))
                 xtmp += 1
     return levelmat
 
@@ -44,10 +41,9 @@ def save_level(levelmat, levelname):
         level.write('\n'.join(data))
 
 
-
 def start_process_create_level():
     mat = gen_mat()
-    rmat = gen_void(mat, randint(2, 10))
+    rmat = gen_room(mat, randint(60, 90))
     del mat
     save_level(rmat, '1')
     del rmat
